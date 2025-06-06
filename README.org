@@ -72,6 +72,7 @@ It should store in ram some modifiables files. So I need to know where
 to find thats files.
 
 1. Base dir
+   That 
    1. Table with fix size
 2. LCD Show file names
 3. Read input from keyboard
