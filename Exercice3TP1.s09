@@ -1,0 +1,49 @@
+* TD3ex2
+* Calculs du nombre de majuscule, minuscule et chiffre dans un message
+* delimité avec la valeur $00
+	ORG $9F00
+NBMaj		 EQU $A010
+NBMin		 EQU $A011
+NBChiffre	 EQU $A012
+
+	CLRB
+
+	STB 	NBChiffre
+	STB 	NBMaj
+	STB 	NBMin
+	LDX 	#msg
+Bcl	LDA 	,X+
+	CMPA 	#$00
+	LBEQ 	FIN
+
+	LDY 	#NBChiffre
+	CMPA 	#$30
+	BLT 	Bcl
+	CMPA 	#$39
+	BLE 	modCompteur
+
+	LDY 	#NBMaj
+	CMPA 	#$41
+	BLT 	Bcl
+	CMPA 	#$5B
+	BLT 	modCompteur
+
+	LDY 	#NBMin
+	CMPA 	#$61
+	BLT 	Bcl
+	CMPA 	#$7B
+	BLT 	modCompteur
+	
+	BRA 	Bcl
+
+modCompteur	LDB ,y
+		INCB
+		STB ,y
+		BRA Bcl
+
+*localisation et initialisation du message
+	ORG $9FC0
+msg   FCB 'G','o','o','d',$20,'M','o','r','n','i','n','g',$20,'E','N','S','I','M',$20,'2','0','2','0',$00
+*msg FCB $10,$20,$30,$31,$32,$00--> autre possibilité msie en commentaire
+
+FIN NOP

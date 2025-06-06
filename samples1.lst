@@ -1,0 +1,49 @@
+MC6809 Assembler, Copyright (C) GMV 1989-1998
+File: samples1.lst
+                      1. *	SAMPLES1.S09 modified in emacs
+                      2. *	check out some addressing modes...
+                      3. 
+C000                  4.    	ORG	$C000
+                      5. 	
+C000 10 CE C2 FF      6. 	LDS	#$C2FF		set Stack-Pointer
+                      7. 
+C004 86 0A            8. 	LDA	#10		immediate
+C006 B7 00 10         9. 	STA	$10		extended
+C009 F6 00 10        10. 	LDB	$10		
+C00C 86 01           11. 	LDA	#$1
+C00E 1F 8B           12. 	TFR	A,DP		set Direct Page Register
+C010 96 10           13. 	LDA	<$10		access direct page
+                     14. 
+C012 8E C1 00        15. 	LDX	#start
+C015 10 8E C1 24     16. 	LDY	#end
+                     17. 
+                     18. * nul offset
+C019 A6 84           19. 	LDA	,X
+C01B E6 A4           20. 	LDB	,Y
+                     21. 
+                     22. * autoincrement
+C01D A6 80           23. 	LDA	,X+
+C01F E6 81           24. 	LDB	,X++
+                     25. 
+                     26. * autodecrement
+C021 A6 82           27. 	LDA	,-X
+C023 E6 83           28. 	LDB	,--X
+                     29. 
+                     30. 
+C100                 31. 	ORG	$C100		data-area
+                     32. *	Assembler directives
+C100 04 03 02 01     33. start	FCB	4,3,2,1
+C104                 34. mid	RMB	32
+C124 00 01 00 02 00  35. end	FDB	1,2,3,4
+          03 00 04
+                     36. 
+                     37. * 	another useful one ...
+     0000 C100       38. startcopy	EQU	start
+                     39. 
+
+--	SYMBOL TABLE:
+--	VALUE	SYMBOL 
+	C100	start
+	C124	end
+	C104	mid
+	C100	startcopy

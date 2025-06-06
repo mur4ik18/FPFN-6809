@@ -1,0 +1,32 @@
+* 	SAMPLES2.S09
+*	subroutine call
+
+	ORG	$C000
+	LDS	#$100		must have a valid stack
+	JSR	Add2toA		call subroutine
+	NOP			.. do nothing...
+	NOP
+	NOP
+
+Add2toA	ADDA	#2
+	RTS
+
+
+* 	SAMPLES2.S09
+*	subroutine call
+
+	ORG	$4000
+	LDS	#$100
+        LDA #$A
+
+boucle:	BSR	Add2toA
+	BRA	boucle
+
+Add2toA	ADDA	#2
+	BSR Sub2toA
+	PSHS A
+	RTS
+
+Sub2toA DECA
+	DECA
+	RTS

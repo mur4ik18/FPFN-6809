@@ -1,0 +1,38 @@
+*	SAMPLES1.S09
+*	check out some addressing modes...
+	ORG	$C000
+	
+	LDS	#$C2FF		set Stack-Pointer
+
+	LDA	#10		immediate
+	STA	$10		extended
+	LDB	$10		
+	LDA	#$1
+	TFR	A,DP		set Direct Page Register
+	LDA	<$10		access direct page
+
+	LDX	#start
+	LDY	#end
+
+* nul offset
+	LDA	,X
+	LDB	,Y
+
+* autoincrement
+	LDA	,X+
+	LDB	,X++
+
+* autodecrement
+	LDA	,-X
+	LDB	,--X
+
+
+	ORG	$C100		data-area
+*	Assembler directives
+start	FCB	4,3,2,1
+mid	RMB	32
+end	FDB	1,2,3,4
+
+* 	another useful one ...
+startcopy	EQU	start
+

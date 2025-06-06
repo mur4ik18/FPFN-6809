@@ -1,0 +1,8 @@
+*	SAMPLES4.S09
+*	simulated input/output (E000-E0FF area)
+	ORG	$C000
+start
+	LDA	$E000	read value from port
+	ROLA		shift left
+	STA	$E000	write it back...
+	BRA	start	repeat

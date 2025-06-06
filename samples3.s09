@@ -1,0 +1,58 @@
+*	SAMPLES3.S09
+* 	IRQ simulation
+
+IRQMASK	EQU	$10
+
+	ORG	$C000
+	LDS	#$100			set stack 
+	LDX	#irq_routine		set interrupt vectors...
+	STX	$DFF8
+	LDX	#firq_routine
+	STX	$DFF6
+	LDX	#nmi_routine
+	STX	$DFFC
+
+	ANDCC	#0			turn interrupts on...
+
+*
+* fall into an endless loop which only
+* increments value in Y-register ...
+endless:
+	NOP
+	LEAY	1,Y
+	NOP
+	NOP
+	BRA	endless
+
+swi_irq:
+* just do something ...
+	ldd	#$1122
+	rti
+
+* Interrupt routine
+* Add 1 to memory location 0000
+irq_routine
+	LDA	irq_data
+	ADDA	#1
+	STA	irq_data
+	RTI
+
+* Fast Interrupt routine
+* Add 4 to memory location 0000
+firq_routine
+	LDA	irq_data
+	ADDA	#2
+	STA	irq_data
+	RTI
+
+* Non Maskable Interrupt routine
+* Add $10 to memory location 0000
+nmi_routine
+	LDA	irq_data
+	ADDA	#$10
+	STA	irq_data
+	RTI
+
+
+	org	0
+irq_data:	rmb	1
