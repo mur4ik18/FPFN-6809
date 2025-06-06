@@ -16,10 +16,41 @@ To build a virtual file system that permet to stock binaries in the
 memory and access them by using an application, that can reads files
 and modify them in the future.
 
+** Memory mapping
 #+begin_src dessein
   0xFFFF ---------
          |       |
          |ROM 16k|
          |       |
   0xC000 ---------
+         |       |
+         | EMPTY | For new devices
+         |       |
+  0xA000 ---------
+         |  I/O  |
+  0x8000 ---------
+         |  SYS  |
+  0x7C00 |+++++++|
+         |       |
+         |       |
+         |RAM 32K|
+         |       |
+         |       |
+  0x0000 ---------
 #+end_src
+
+In my disopsition I have only 0x0000-0x7C00 => 
+#+begin_src emacs-lisp
+  (+ 
+   (* 7  (expt 16 3)) 
+   (* 12 (expt 16 2)) 
+   (* 0  (expt 16 1)) 
+   (* 0  (expt 16 0))
+  )
+#+end_src
+
+#+RESULTS:
+: 31744
+
+So, I have only 31744 bytes for all, for application and files
+storage.
