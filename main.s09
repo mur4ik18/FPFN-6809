@@ -1,14 +1,24 @@
 *  
 
+        ORG $0200   ; Init
+main    ldx #Wt1
+        STA $8000
+        jsr $F000
+        JSR $F02D
+        BRA print
+ret     SWI
 
-   ORG $C000 * Init
+print   lda ,x+
+        CMPA #$00
+        BEQ ret
+        jsr $F047
+        BRA print
 
 
 
-
-   ORG $0200  
-Wt1 FCB 'H','e','l','l','o','!',$00   *Write first text in the RAM
-*        48  65  6c  6C  6F 21
+        ORG $0100  
+Wt1     FCB 'H','e','l','l','o','!',$00   *Write first text in the RAM
+*            48  65  6c  6C  6F 21
 
 
 
