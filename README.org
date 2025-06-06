@@ -52,5 +52,26 @@ In my disopsition I have only 0x0000-0x7C00 =>
 #+RESULTS:
 : 31744
 
-So, I have only 31744 bytes for all, for application and files
-storage.
+So, I have only 31744 bytes for all, for files storage.  In ROM I will
+have my application that will create file system and manage this.
+
+** 6809 registers
+- A accum (8Bits)
+- B accum (8Bits)
+- D accum (16Bits)
+- X index (16Bits)
+- Y index (16Bits)
+- DP page register (8Bits)
+- CC state (8Bits)
+- U stack pointer user
+- S stack pointer System
+
+
+* Virtual file system
+It should store in ram some modifiables files. So I need to know where
+to find thats files.
+
+1. Base dir
+   1. Table with fix size
+2. LCD Show file names
+3. Read input from keyboard

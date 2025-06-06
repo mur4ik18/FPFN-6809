@@ -1,0 +1,14 @@
+*  
+
+
+   ORG $C000 * Init
+
+
+
+
+   ORG $0200  
+Wt1 FCB 'H','e','l','l','o','!',$00   *Write first text in the RAM
+*        48  65  6c  6C  6F 21
+
+
+
