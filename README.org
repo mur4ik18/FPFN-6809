@@ -15,3 +15,11 @@ I have a kit that you can see on this screenshot.
 To build a virtual file system that permet to stock binaries in the
 memory and access them by using an application, that can reads files
 and modify them in the future.
+
+#+begin_src dessein
+  0xFFFF ---------
+         |       |
+         |ROM 16k|
+         |       |
+  0xC000 ---------
+#+end_src
