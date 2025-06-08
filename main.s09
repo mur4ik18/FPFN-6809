@@ -1,24 +1,73 @@
-*  
+catalog     EQU $0100
+catalog_end EQU $0140
+file_system EQU $3C00
 
-        ORG $0200   ; Init
-main    ldx #Wt1
-        STA $8000
-        jsr $F000
-        JSR $F02D
-        BRA print
-ret     SWI
+    ORG     $0200   ; Init
+    LDX     #catalog
+clear_catalog:
+* put 00 in each byte from $100 to $180
+    LDA     #0
+    STA     ,X+
+    CMPX    #catalog_end
+    BEQ     find_empty_pos
+    BRA     clear_catalog
 
-print   lda ,x+
-        CMPA #$00
-        BEQ ret
-        jsr $F047
-        BRA print
+find_empty_pos:
+    LDX     #catalog
+fep1:
+    LDA     ,X
+    CMPX    #catalog_end
+    BEQ     out_of_catalog
+    CMPA    #0
+    BEQ     init_catalog
+    TFR     X,D
+    ADDD    #$0010
+    TFR     D,X
+    BRA     fep1
 
 
+* Normaly I should to have adress of the first empty element in my catalog saved in X register
+init_catalog
+* Create 2 file
+    jsr     $F000
+    JSR     $F02D
+    PSHS    X
+    JSR     create_file
+    PULS    X
+    BRA     print
 
-        ORG $0100  
-Wt1     FCB 'H','e','l','l','o','!',$00   *Write first text in the RAM
-*            48  65  6c  6C  6F 21
 
+create_file:
+* in the tmp $0000 is stored name of the file
+* So read the file until $00
+    LDY     #file1
+    LDB     #0
+cf1:
+    LDA     ,Y+
+    CMPA    #$00
+    BEQ     cf2
+    STA     ,X+
+    INCB
+    BRA     cf1
 
+cf2:
+    STA     ,X
+    RTS
 
+print:
+    lda     ,x+
+    CMPA    #$00
+    BEQ     ret
+    jsr     $F047
+    BRA     print
+
+ret:
+    SWI
+
+out_of_catalog:
+* In the future I should to show the message on the screen
+* need to work with
+    NOP
+
+        ORG $0000
+file1   FCB 'e','m','a','c','s',$00   *Write first text in the RAM
