@@ -9,7 +9,7 @@ clear_catalog:
     LDA     #0
     STA     ,X+
     CMPX    #catalog_end
-    BEQ     find_empty_pos
+    BEQ     init_catalog
     BRA     clear_catalog
 
 find_empty_pos:
@@ -19,11 +19,14 @@ fep1:
     CMPX    #catalog_end
     BEQ     out_of_catalog
     CMPA    #0
-    BEQ     init_catalog
+    BEQ     fep2
     TFR     X,D
     ADDD    #$0010
     TFR     D,X
     BRA     fep1
+
+fep2:
+    RTS
 
 
 * Normaly I should to have adress of the first empty element in my catalog saved in X register
@@ -32,15 +35,23 @@ init_catalog
     jsr     $F000
     JSR     $F02D
     PSHS    X
+    LDY     #file1
+    JSR     create_file
+    JSR     find_empty_pos
+    LDY     #file2
+    JSR     create_file
+    JSR     find_empty_pos
+    LDY     #file3
     JSR     create_file
     PULS    X
-    BRA     print
+    JSR     print
+    SWI
+
 
 
 create_file:
 * in the tmp $0000 is stored name of the file
 * So read the file until $00
-    LDY     #file1
     LDB     #0
 cf1:
     LDA     ,Y+
@@ -56,13 +67,13 @@ cf2:
 
 print:
     lda     ,x+
-    CMPA    #$00
+    CMPA    #$0
     BEQ     ret
     jsr     $F047
     BRA     print
 
 ret:
-    SWI
+    RTS
 
 out_of_catalog:
 * In the future I should to show the message on the screen
@@ -71,3 +82,5 @@ out_of_catalog:
 
         ORG $0000
 file1   FCB 'e','m','a','c','s',$00   *Write first text in the RAM
+file2   FCB 'g','n','u',$00
+file3   FCB 'k','i','t','6','8','0','9',$00
